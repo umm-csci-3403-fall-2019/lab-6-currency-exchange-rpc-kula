@@ -9,7 +9,15 @@ import java.util.Properties;
  */
 public class ExchangeRateReader {
 
+
+       
     private String accessKey;
+       // String urlString = "http://api.finance.xaviermedia.com/api/"+ year + "/" + mon + "/" + day + ".xml";
+        String urlString = "http://api.finance.xaviermedia.com/api/";
+        URL url = new URL(urlString);
+        InputStream inputStream = url.openStream();
+
+
 
     /**
      * Construct an exchange rate reader using the given base URL. All requests
@@ -23,7 +31,10 @@ public class ExchangeRateReader {
      *            the base URL for requests
      */
     public ExchangeRateReader(String baseURL) throws IOException {
-        /*
+        URL burl = new URL(baseURL);
+
+        
+        /*AccessKeys
          * DON'T DO MUCH HERE!
          * People often try to do a lot here, but the action is actually in
          * the two methods below. All you need to do here is store the
@@ -81,8 +92,12 @@ public class ExchangeRateReader {
      * @return the desired exchange rate
      * @throws IOException if there are problems reading from the server
      */
+    
+
     public float getExchangeRate(String currencyCode, int year, int month, int day) throws IOException {
         // TODO Your code here
+        
+
 
         // Remove the next line when you've implemented this method.
         throw new UnsupportedOperationException();
