@@ -154,10 +154,16 @@ public class ExchangeRateReader {
     public float getExchangeRate(
             String fromCurrency, String toCurrency,
             int year, int month, int day) throws IOException {
-        // TODO Your code here
 
-        // Remove the next line when you've implemented this method.
-        throw new UnsupportedOperationException();
+        String urlSpecified =  baseURL + year + "-" + doubleDigit(month) + "-" + doubleDigit(day) + "?access_key=" + accessKey;
+        URL url = new URL(urlSpecified);
+        InputStream inputStream = url.openStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        JsonObject object = new JsonParser().parse(reader).getAsJsonObject();
+        JsonObject data = object.getAsJsonObject("rates");
+        float exchangerate =  data.get(fromCurrency).getAsFloat() / data.get(toCurrency).getAsFloat();
+        return exchangerate;
+
     }
 
 
