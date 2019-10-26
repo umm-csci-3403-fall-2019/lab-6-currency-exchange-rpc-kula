@@ -104,15 +104,24 @@ public class ExchangeRateReader {
      * @return the desired exchange rate
      * @throws IOException if there are problems reading from the server
      */
-    
 
+    public String doubleDigit(int date) {
+        if(date < 10) {
+
+            String num = Integer.toString(date);
+            return "0" + num;
+        }
+        else {
+            return Integer.toString(date);
+        }
+    }
 
 
     public float getExchangeRate(String currencyCode, int year, int month, int day) throws IOException {
 
         
 
-        String urlSpecified =  baseURL + year + "-" + month + "-" + day + "?access_key=" + accessKey;
+        String urlSpecified =  baseURL + year + "-" + doubleDigit(month) + "-" + doubleDigit(day) + "?access_key=" + accessKey;
         URL url = new URL(urlSpecified);
         InputStream inputStream = url.openStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
