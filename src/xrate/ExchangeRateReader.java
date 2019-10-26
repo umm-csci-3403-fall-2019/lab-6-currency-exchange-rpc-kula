@@ -1,8 +1,18 @@
 package xrate;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
 import java.net.URL;
 import java.util.Properties;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 /**
  * Provide access to basic currency exchange rate services.
@@ -12,6 +22,8 @@ public class ExchangeRateReader {
 
        
     private String accessKey;
+     private String baseURL;
+
        // String urlString = "http://api.finance.xaviermedia.com/api/"+ year + "/" + mon + "/" + day + ".xml";
         String urlString = "http://api.finance.xaviermedia.com/api/";
         URL url = new URL(urlString);
@@ -31,7 +43,7 @@ public class ExchangeRateReader {
      *            the base URL for requests
      */
     public ExchangeRateReader(String baseURL) throws IOException {
-        URL burl = new URL(baseURL);
+        this.baseURL = baseURL;
 
         
         /*AccessKeys
@@ -94,13 +106,22 @@ public class ExchangeRateReader {
      */
     
 
+
+
     public float getExchangeRate(String currencyCode, int year, int month, int day) throws IOException {
-        // TODO Your code here
+
         
 
+        String urlSpecified =  baseURL + year + "-" + month + "-" + day + "?access_key=" + accessKey;
+        URL url = new URL(urlSpecified);
+        InputStream inputStream = url.openStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        JsonObject object = new JsonParser().parse(reader).getAsJsonObject();
+        JsonObject data = object.getAsJsonObject("rates");
+        float currency = data.get(currencyCode).getAsFloat();
+        return currency;
 
-        // Remove the next line when you've implemented this method.
-        throw new UnsupportedOperationException();
+
     }
 
     /**
@@ -120,6 +141,7 @@ public class ExchangeRateReader {
      * @return the desired exchange rate
      * @throws IOException if there are problems reading from the server
      */
+
     public float getExchangeRate(
             String fromCurrency, String toCurrency,
             int year, int month, int day) throws IOException {
@@ -128,4 +150,8 @@ public class ExchangeRateReader {
         // Remove the next line when you've implemented this method.
         throw new UnsupportedOperationException();
     }
+
+
 }
+
+
